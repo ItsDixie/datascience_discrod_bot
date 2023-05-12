@@ -109,4 +109,4 @@ async def save(data):
         print(error)
 
 ##-----------END_TASKS-------------------------##
-bot.run('ODMwNTU5OTcxNjc4NjE3NjMw.G_ib0Y.RYpapf_QWMfsm-6i1o7F6VIQ4qZsurIT66LSaM')
+bot.run('Token here, lmao')

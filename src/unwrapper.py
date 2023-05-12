@@ -63,7 +63,7 @@ with open('stats.txt', 'w') as f:
         dfU = pd.DataFrame(dataU)
 
         dfU = dfU.sort_values('words', ascending=False)
-        dfU.to_csv (r'USERSdataKAIJU.csv', index= False )
+        dfU.to_csv (r'USERSdata.csv', index= False )
         print("---------------users-----------")
         print(dfU)
         print('\n')
@@ -102,7 +102,7 @@ with open('stats.txt', 'w') as f:
         print(f"Amount of msgs with bad words: {np.sum(arr4)}\n")
 
         dfC = dfC.sort_values('words', ascending=False)
-        dfC.to_csv (r'CHATSdataKAIJU.csv', index= False )
+        dfC.to_csv (r'CHATSdata.csv', index= False )
         print("---------------chats-----------")
         print(dfC)
         print('\n')

@@ -13,7 +13,7 @@ chats = [msgC, badC] ## [1] - кол-во сообщений [2] - кол-во �
 
 data = [users, chats] # для сохранки
 
-cursewords = ['bad_words_here']
+cursewords = ["пизда", "уебище", "конч", "блять", "ебать", "залупа", "сука", "хуй", "пиздец", "еба", "ахуеть", "пидор", "бля", "сучка", "выебу", "eбал"]
 
 global slash_inter
 slash_inter = disnake.ApplicationCommandInteraction
@@ -72,11 +72,13 @@ async def debug(slash_inter):
     await slash_inter.send('Please wait...')
     await slash_inter.edit_original_response(data)
     
-@bot.slash_command(description='Пожаловаться на плохое слово') ## tool learning
-async def rep(slash_inter, member:disnake.Member):
+@bot.slash_command(description='Пожаловаться на плохое слово, выполнять с осторожностью') ## tool learning
+async def rep(slash_inter, word:str, member:disnake.Member):
     await slash_inter.send('Please wait...')
     bad(member)
+    cursewords.append(str(word))
     await slash_inter.edit_original_response(f"{member} has been reported using bad words")
+
 
 @bot.event ## messages from users
 async def on_message(message):
@@ -107,4 +109,4 @@ async def save(data):
         print(error)
 
 ##-----------END_TASKS-------------------------##
-bot.run('TOKEN_HERE')
+bot.run('ODMwNTU5OTcxNjc4NjE3NjMw.G_ib0Y.RYpapf_QWMfsm-6i1o7F6VIQ4qZsurIT66LSaM')

@@ -17,24 +17,13 @@ badC = {}
 #-------#
 pd.options.display.max_rows = 200
 
-with open('data.json', 'r') as save:
-        rough = json.load(save) # массив -> массивы -> словари
-        users = rough[0]
-        chats = rough[1]
-
-        msgU = users[0]
-        badU = users[1]
-
-        msgC = chats[0]
-        badC = chats[1]
-        
-
 with open('stats.txt', 'w') as f:
+
     # Redirecting stdout to file
     sys.stdout = f
 
     #---------------users-----------
-    def unwrapU(msgU, badU):
+    def unwrapU(msgU, badU, day):
         names = []
         arr1 = np.empty((1,1))
         arr2 = np.empty((1,1))
@@ -63,8 +52,8 @@ with open('stats.txt', 'w') as f:
         dfU = pd.DataFrame(dataU)
 
         dfU = dfU.sort_values('words', ascending=False)
-        dfU.to_csv (r'USERSdata.csv', index= False )
-        print("---------------users-----------")
+        dfU.to_csv (rf'USERSdata{day}.csv', index= False )
+        print(f"\n---------------users-{day}-----------")
         print(dfU)
         print('\n')
         print(dfU.describe())
@@ -72,7 +61,7 @@ with open('stats.txt', 'w') as f:
     #---------------users-----------
     
     #---------------chats-----------
-    def unwrapC(msgC, badC):
+    def unwrapC(msgC, badC, day):
         nick = []
         arr3 = np.empty((1,1))
         arr4 = np.empty((1,1))
@@ -102,18 +91,34 @@ with open('stats.txt', 'w') as f:
         print(f"Amount of msgs with bad words: {np.sum(arr4)}\n")
 
         dfC = dfC.sort_values('words', ascending=False)
-        dfC.to_csv (r'CHATSdata.csv', index= False )
-        print("---------------chats-----------")
+        dfC.to_csv (rf'CHATSdata{day}.csv', index= False )
+        print(f"---------------chats-{day}-----------")
         print(dfC)
         print('\n')
         print(dfC.describe())
         print("-------------------------------\n")
     #---------------chats----------- 
-    unwrapU(msgU, badU)
-    unwrapC(msgC, badC)
+
+    with open('dayLOG.json', 'r') as save:
+        data = json.load(save) # словарь -> массив -> массивы -> словари
+
+        for key in data.keys():
+            rough = data[key]
+            users = rough[0]
+            chats = rough[1]
+
+            msgU = users[0]
+            badU = users[1]
+
+            msgC = chats[0]
+            badC = chats[1]
+
+            unwrapU(msgU, badU, key)
+            unwrapC(msgC, badC, key)
     
 
     sys.stdout = original_stdout
+        
 
 
     # (pd.concat([dfU, dfC], ignore_index=True) - объединить датафреймы)

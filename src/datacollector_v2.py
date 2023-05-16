@@ -1,5 +1,7 @@
 import disnake
+import asyncio
 from disnake.ext import tasks, commands
+from datetime import datetime
 import json
 
 msgU = {} # msgU["Dixxe"] кол-во сообщений от юзера
@@ -11,7 +13,9 @@ badC = {} # кол-во матов в чате
 users = [msgU, badU] ## [1] - кол-во сообщений [2] - кол-во матов
 chats = [msgC, badC] ## [1] - кол-во сообщений [2] - кол-во матов
 
+
 data = [users, chats] # для сохранки
+date = {} # 'число' : data
 
 cursewords = ["пизда", "уебище", "конч", "блять", "ебать", "залупа", "сука", "хуй", "пиздец", "еба", "ахуеть", "пидор", "бля", "сучка", "выебу", "eбал"]
 
@@ -60,12 +64,16 @@ def ExportData(data):
     with open('data.json', 'w') as rough:
         json.dump(data, rough)
 
+def ExportDay(date):
+    with open('dayLOG.json', 'w') as log:
+        json.dump(date, log)
+
 ###--- function------#
 
 @bot.event ## works when it ready
 async def on_ready():
-    print(f'We have logged in as {bot.user}')
-    await save.start(data)
+    print(f'All systems nominal, welcome {bot.user}')
+    await asyncio.gather(save.start(data), saveDATE.start(data))
 
 @bot.slash_command(description='Показать собранную дату') ## tool for debugging values
 async def debug(slash_inter):
@@ -108,5 +116,14 @@ async def save(data):
     except Exception as error:
         print(error)
 
+@tasks.loop(minutes=1.0) ## цикл сохранения переменных в файл линия 180
+async def saveDATE(data):
+    try:
+        date[f"{datetime.date(datetime.now())}"] = data
+        ExportDay(date)
+    except Exception as err:
+        print(err)
+    
+
 ##-----------END_TASKS-------------------------##
-bot.run('Token here, lmao')
+bot.run('TOKEN_HERE')
